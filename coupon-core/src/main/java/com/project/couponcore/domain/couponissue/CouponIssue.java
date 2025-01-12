@@ -1,4 +1,6 @@
-package com.project.couponcore.domain.coupon;
+package com.project.couponcore.domain.couponissue;
+
+import static lombok.AccessLevel.*;
 
 import java.time.LocalDateTime;
 
@@ -12,12 +14,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
 @Table(name = "coupon_issues")
 public class CouponIssue extends AbstractEntity {
 
@@ -36,4 +39,10 @@ public class CouponIssue extends AbstractEntity {
     private LocalDateTime dateIssued;
 
     private LocalDateTime dateUsed;
+
+    @Builder
+    public CouponIssue(Long couponId, Long userId) {
+        this.couponId = couponId;
+        this.userId = userId;
+    }
 }

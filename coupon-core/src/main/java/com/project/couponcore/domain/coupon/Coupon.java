@@ -1,7 +1,10 @@
 package com.project.couponcore.domain.coupon;
 
+import static lombok.AccessLevel.*;
+
 import java.time.LocalDateTime;
 
+import com.project.couponcore.common.exception.InvalidParamException;
 import com.project.couponcore.domain.AbstractEntity;
 
 import jakarta.persistence.Column;
@@ -13,12 +16,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@NoArgsConstructor
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
 @Table(name = "coupons")
 public class Coupon extends AbstractEntity {
 
@@ -39,22 +45,47 @@ public class Coupon extends AbstractEntity {
     private int issuedQuantity;
 
     @Column(nullable = false)
-    private int discountQuantity;
+    private int discountAmount;
 
     @Column(nullable = false)
-    private int minAvailableQuantity;
+    private int minAvailableAmount;
 
     @Column(nullable = false)
-    private LocalDateTime dataIssueStart;
+    private LocalDateTime dateIssueStart;
 
     @Column(nullable = false)
-    private LocalDateTime dataIssueEnd;
+    private LocalDateTime dateIssueEnd;
+
+    public void issue() {
+        if (!availableIssueQuantity()) {
+            throw new InvalidParamException(
+                "발급 가능한 수량을 초과 했습니다. total : %s, issued : %s".formatted(totalQuantity, issuedQuantity));
+        }
+        if (!availableIssueDate()) {
+            throw new InvalidParamException(
+                "발급 가능한 일자가 아닙니다. request : %s, issueStart : %s, issueEnd : %s"
+                    .formatted(LocalDateTime.now(), dateIssueStart, dateIssueEnd));
+        }
+        issuedQuantity++;
+    }
+
+    private boolean availableIssueQuantity() {
+        if (totalQuantity == null) {
+            return true;
+        }
+        return totalQuantity > issuedQuantity;
+    }
+
+    private boolean availableIssueDate() {
+        LocalDateTime now = LocalDateTime.now();
+        return dateIssueStart.isBefore(now) && dateIssueEnd.isAfter(now);
+    }
 
     @Getter
     @AllArgsConstructor
     public enum CouponType {
         FIRST_COME_FIRST_SERVED("선착순 쿠폰");
-        
+
         private final String description;
     }
 }
