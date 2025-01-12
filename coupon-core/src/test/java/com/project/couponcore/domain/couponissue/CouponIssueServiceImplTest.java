@@ -110,10 +110,10 @@ class CouponIssueServiceImplTest {
             .couponType(Coupon.CouponType.FIRST_COME_FIRST_SERVED)
             .totalQuantity(totalQuantity)
             .issuedQuantity(issuedQuantity)
-            .discountQuantity(20)
-            .minAvailableQuantity(10000)
-            .dataIssueStart(LocalDateTime.now().minusDays(2))
-            .dataIssueEnd(LocalDateTime.now().plusDays(2))
+            .discountAmount(20)
+            .minAvailableAmount(10000)
+            .dateIssueStart(LocalDateTime.now().minusDays(2))
+            .dateIssueEnd(LocalDateTime.now().plusDays(2))
             .build();
         return coupon;
     }
