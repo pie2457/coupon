@@ -1,0 +1,8 @@
+### 쿠폰 발급 API
+POST http://localhost:8080/issue
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "couponId": 1
+}

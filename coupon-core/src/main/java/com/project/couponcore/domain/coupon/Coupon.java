@@ -45,16 +45,16 @@ public class Coupon extends AbstractEntity {
     private int issuedQuantity;
 
     @Column(nullable = false)
-    private int discountQuantity;
+    private int discountAmount;
 
     @Column(nullable = false)
-    private int minAvailableQuantity;
+    private int minAvailableAmount;
 
     @Column(nullable = false)
-    private LocalDateTime dataIssueStart;
+    private LocalDateTime dateIssueStart;
 
     @Column(nullable = false)
-    private LocalDateTime dataIssueEnd;
+    private LocalDateTime dateIssueEnd;
 
     public void issue() {
         if (!availableIssueQuantity()) {
@@ -64,7 +64,7 @@ public class Coupon extends AbstractEntity {
         if (!availableIssueDate()) {
             throw new InvalidParamException(
                 "발급 가능한 일자가 아닙니다. request : %s, issueStart : %s, issueEnd : %s"
-                    .formatted(LocalDateTime.now(), dataIssueStart, dataIssueEnd));
+                    .formatted(LocalDateTime.now(), dateIssueStart, dateIssueEnd));
         }
         issuedQuantity++;
     }
@@ -78,7 +78,7 @@ public class Coupon extends AbstractEntity {
 
     private boolean availableIssueDate() {
         LocalDateTime now = LocalDateTime.now();
-        return dataIssueStart.isBefore(now) && dataIssueEnd.isAfter(now);
+        return dateIssueStart.isBefore(now) && dateIssueEnd.isAfter(now);
     }
 
     @Getter
