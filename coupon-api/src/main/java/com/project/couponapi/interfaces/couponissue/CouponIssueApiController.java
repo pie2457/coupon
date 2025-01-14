@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.couponapi.application.couponissue.CouponIssueFacade;
 import com.project.couponcore.domain.couponissue.CouponIssueCommand;
+import com.project.couponcore.domain.couponissue.CouponIssueInfo;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,9 +19,10 @@ public class CouponIssueApiController {
     private final CouponIssueFacade couponIssueFacade;
 
     @PostMapping("/v1/issue")
-    public ResponseEntity issue(@RequestBody CouponIssueDto.RegisterRequest request) {
+    public ResponseEntity<CouponIssueDto.RegisterResponse> issue(@RequestBody CouponIssueDto.RegisterRequest request) {
         CouponIssueCommand.RegisterIssue command = mapper.of(request);
-        couponIssueFacade.issue(command);
-        return (ResponseEntity)ResponseEntity.status(HttpStatus.CREATED);
+        CouponIssueInfo info = couponIssueFacade.issue(command);
+        CouponIssueDto.RegisterResponse response = mapper.of(info);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }
