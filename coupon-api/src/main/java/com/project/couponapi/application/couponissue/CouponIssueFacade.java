@@ -2,8 +2,8 @@ package com.project.couponapi.application.couponissue;
 
 import org.springframework.stereotype.Service;
 
+import com.project.couponapi.common.util.DistributeLockExecutor;
 import com.project.couponcore.domain.couponissue.CouponIssueCommand;
-import com.project.couponcore.domain.couponissue.CouponIssueInfo;
 import com.project.couponcore.domain.couponissue.CouponIssueService;
 
 import lombok.RequiredArgsConstructor;
@@ -12,10 +12,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CouponIssueFacade {
     private final CouponIssueService couponIssueService;
+    private final DistributeLockExecutor distributeLockExecutor;
 
-    public CouponIssueInfo issue(CouponIssueCommand.RegisterIssue command) {
-        synchronized (this) {
-            return couponIssueService.issue(command);
-        }
+    public void issue(CouponIssueCommand.RegisterIssue command) {
+        distributeLockExecutor.execute("lock_" + command.couponId(), 10000, 10000,
+            () -> {
+                couponIssueService.issue(command);
+            });
     }
 }
