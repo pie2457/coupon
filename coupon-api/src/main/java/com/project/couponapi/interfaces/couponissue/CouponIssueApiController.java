@@ -18,7 +18,7 @@ public class CouponIssueApiController {
     private final CouponIssueDtoMapper mapper;
     private final CouponIssueFacade couponIssueFacade;
 
-    @PostMapping("/issue")
+    @PostMapping("/v1/issue")
     public ResponseEntity<CouponIssueDto.RegisterResponse> issue(@RequestBody CouponIssueDto.RegisterRequest request) {
         CouponIssueCommand.RegisterIssue command = mapper.of(request);
         CouponIssueInfo info = couponIssueFacade.issue(command);
