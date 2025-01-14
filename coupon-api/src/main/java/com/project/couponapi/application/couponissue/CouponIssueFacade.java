@@ -14,6 +14,8 @@ public class CouponIssueFacade {
     private final CouponIssueService couponIssueService;
 
     public CouponIssueInfo issue(CouponIssueCommand.RegisterIssue command) {
-        return couponIssueService.issue(command);
+        synchronized (this) {
+            return couponIssueService.issue(command);
+        }
     }
 }
