@@ -1,5 +1,5 @@
 ### 쿠폰 발급 API
-POST http://localhost:8080/issue
+POST http://localhost:8080/v1/issue
 Content-Type: application/json
 
 {

@@ -19,7 +19,7 @@ public class CouponIssueServiceImpl implements CouponIssueService {
     @Override
     @Transactional
     public CouponIssueInfo issue(CouponIssueCommand.RegisterIssue command) {
-        Coupon coupon = couponReader.getCoupon(command.couponId());
+        Coupon coupon = couponReader.getCouponWithLock(command.couponId());
         couponIssueReader.checkAlreadyIssuance(coupon.getId(), command.userId());
         coupon.issue();
         CouponIssue couponIssue = couponIssueStore.store(command.toEntity());

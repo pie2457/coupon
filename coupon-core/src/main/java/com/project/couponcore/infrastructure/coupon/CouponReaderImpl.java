@@ -18,4 +18,10 @@ public class CouponReaderImpl implements CouponReader {
         return couponRepository.findById(couponId)
             .orElseThrow(() -> new EntityNotFoundException("쿠폰 정책이 존재하지 않습니다. %s".formatted(couponId)));
     }
+
+    @Override
+    public Coupon getCouponWithLock(long couponId) {
+        return couponRepository.findCouponWithLock(couponId)
+            .orElseThrow(() -> new EntityNotFoundException("쿠폰 정책이 존재하지 않습니다. %s".formatted(couponId)));
+    }
 }
