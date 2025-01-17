@@ -5,7 +5,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
 import com.project.couponcore.domain.couponissue.CouponIssueCommand;
-import com.project.couponcore.domain.couponissue.CouponIssueInfo;
 
 @Mapper(
     componentModel = "spring",
@@ -14,6 +13,4 @@ import com.project.couponcore.domain.couponissue.CouponIssueInfo;
 )
 public interface CouponIssueDtoMapper {
     CouponIssueCommand.RegisterIssue of(CouponIssueDto.RegisterRequest request);
-
-    CouponIssueDto.RegisterResponse of(CouponIssueInfo info);
 }

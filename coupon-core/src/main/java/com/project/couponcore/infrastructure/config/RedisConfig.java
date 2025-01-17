@@ -1,4 +1,4 @@
-package com.project.couponapi.config;
+package com.project.couponcore.infrastructure.config;
 
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;

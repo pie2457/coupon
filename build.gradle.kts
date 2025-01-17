@@ -8,7 +8,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.3"
 }
 
-group = "com.example"
+group = "com.project"
 version = "0.0.1-SNAPSHOT"
 
 java {
@@ -38,6 +38,7 @@ subprojects {
     dependencies {
         implementation("org.springframework.boot:spring-boot-starter-data-jpa")
         implementation("org.springframework.boot:spring-boot-starter-data-redis")
+        implementation("org.springframework.boot:spring-boot-starter")
 
         compileOnly("org.projectlombok:lombok")
         annotationProcessor("org.projectlombok:lombok")
