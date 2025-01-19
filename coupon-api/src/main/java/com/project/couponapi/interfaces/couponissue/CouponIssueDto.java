@@ -8,10 +8,4 @@ public class CouponIssueDto {
     ) {
 
     }
-
-    public record RegisterResponse(
-        long couponIssueId
-    ) {
-
-    }
 }

@@ -3,7 +3,6 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.redisson:redisson-spring-boot-starter:3.16.4")
 
     // MapStruct
     implementation("org.mapstruct:mapstruct:1.4.2.Final")
@@ -17,7 +16,6 @@ dependencies {
     annotationProcessor("jakarta.persistence:jakarta.persistence-api")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks.withType<Test> {

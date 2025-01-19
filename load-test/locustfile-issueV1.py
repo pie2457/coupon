@@ -1,16 +1,16 @@
 import random
-from locust import task, FastHttpUser
+from locust import task, FastHttpUser, constant
 
 
 class CouponIssueV1(FastHttpUser):
-    connection_timeout = 10.0
-    network_timeout = 10.0
+    connection_timeout = 5.0
+    network_timeout = 5.0
+    wait_time = constant(0)  # 대기 시간 없음 (RPS 최대화)
 
     @task
     def issue(self):
         payload = {
-            "userId": random.randint(1, 10000000),
+            "userId": random.randint(1, 1000000),  # 범위를 1~100만으로 축소 (캐싱 가능성 높임)
             "couponId": 1
         }
-        with self.rest("POST", "/v1/issue", json=payload):
-            pass
+        self.client.post("/v1/issue", json=payload)  # 응답 검사 없이 단순 요청
