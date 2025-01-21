@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class CouponIssueCacheReaderImpl implements CouponIssueCacheReader {
+public class CouponIssueRedisReaderImpl implements CouponIssueCacheReader {
     private final RedisTemplate<String, String> redisTemplate;
 
     @Override

@@ -18,9 +18,16 @@ public class CouponIssueApiController {
     private final CouponIssueFacade couponIssueFacade;
 
     @PostMapping("/v1/issue")
-    public ResponseEntity<Void> issue(@RequestBody CouponIssueDto.RegisterRequest request) {
+    public ResponseEntity<Void> issueV1(@RequestBody CouponIssueDto.RegisterRequest request) {
         CouponIssueCommand.RegisterIssue command = mapper.of(request);
-        couponIssueFacade.issue(command);
+        couponIssueFacade.issueV1(command);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/v2/issue")
+    public ResponseEntity<Void> issueV2(@RequestBody CouponIssueDto.RegisterRequest request) {
+        CouponIssueCommand.RegisterIssue command = mapper.of(request);
+        couponIssueFacade.issueV2(command);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
