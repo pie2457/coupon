@@ -1,5 +1,14 @@
-### 쿠폰 발급 API
+### 쿠폰 발급 API - VER.1
 POST http://localhost:8080/v1/issue
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "couponId": 1
+}
+
+### 쿠폰 발급 API - VER.2
+POST http://localhost:8080/v2/issue
 Content-Type: application/json
 
 {
