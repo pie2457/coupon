@@ -43,7 +43,7 @@ class CouponIssueServiceImplTest {
         CouponIssue couponIssue = Mockito.mock(CouponIssue.class);
 
         given(couponIssue.getId()).willReturn(1L);
-        given(couponReader.getCoupon(couponId)).willReturn(coupon);
+        given(couponReader.getCouponWithLock(couponId)).willReturn(coupon);
         willDoNothing().given(couponIssueReader).checkAlreadyIssuance(couponId, userId);
         given(couponIssueStore.store(any())).willReturn(couponIssue);
 
@@ -51,7 +51,7 @@ class CouponIssueServiceImplTest {
         couponIssueService.issue(command);
 
         // then
-        then(couponReader).should(times(1)).getCoupon(command.couponId());
+        then(couponReader).should(times(1)).getCouponWithLock(command.couponId());
         then(couponIssueReader).should(times(1))
             .checkAlreadyIssuance(command.couponId(), command.userId());
         then(couponIssueStore).should(times(1)).store(any());
@@ -64,7 +64,7 @@ class CouponIssueServiceImplTest {
         CouponIssueCommand.RegisterIssue command = new CouponIssueCommand.RegisterIssue(userId, couponId);
         Coupon coupon = createCoupon(1000, 0);
 
-        given(couponReader.getCoupon(couponId)).willReturn(coupon);
+        given(couponReader.getCouponWithLock(couponId)).willReturn(coupon);
         willThrow(BadRequestException.class)
             .given(couponIssueReader)
             .checkAlreadyIssuance(couponId, userId);
@@ -80,7 +80,7 @@ class CouponIssueServiceImplTest {
         CouponIssueCommand.RegisterIssue command = new CouponIssueCommand.RegisterIssue(userId, couponId);
         Coupon coupon = createCoupon(10, 11);
 
-        given(couponReader.getCoupon(couponId)).willReturn(coupon);
+        given(couponReader.getCouponWithLock(couponId)).willReturn(coupon);
         willDoNothing().given(couponIssueReader).checkAlreadyIssuance(couponId, userId);
 
         // when & then
@@ -96,7 +96,7 @@ class CouponIssueServiceImplTest {
 
         willThrow(EntityNotFoundException.class)
             .given(couponReader)
-            .getCoupon(couponId);
+            .getCouponWithLock(couponId);
 
         // when & then
         assertThatThrownBy(() -> couponIssueService.issue(command))
