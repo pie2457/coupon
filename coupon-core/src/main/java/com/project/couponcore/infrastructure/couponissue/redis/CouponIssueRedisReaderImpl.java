@@ -21,4 +21,14 @@ public class CouponIssueRedisReaderImpl implements CouponIssueCacheReader {
     public Boolean sIsMember(String key, String value) {
         return redisTemplate.opsForSet().isMember(key, value);
     }
+
+    @Override
+    public Long lSize(String key) {
+        return redisTemplate.opsForList().size(key);
+    }
+
+    @Override
+    public String lIndex(String key, long index) {
+        return redisTemplate.opsForList().index(key, index);
+    }
 }

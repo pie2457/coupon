@@ -2,10 +2,14 @@ package com.project.couponcore.domain.couponissue.cache;
 
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.couponcore.common.exception.BadRequestException;
+import com.project.couponcore.common.exception.EntityNotFoundException;
 import com.project.couponcore.common.exception.InvalidParamException;
 import com.project.couponcore.common.response.ErrorCode;
 import com.project.couponcore.common.util.CacheKeyGenerator;
+import com.project.couponcore.domain.couponissue.CouponIssueCommand;
 
 import lombok.RequiredArgsConstructor;
 
@@ -13,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CouponIssueCacheServiceImpl implements CouponIssueCacheService {
     private final CouponIssueCacheReader cacheReader;
+    private final CouponIssueCacheStore cacheStore;
+    private final ObjectMapper mapper = new ObjectMapper();
 
     @Override
     public void checkCouponIssueQuantity(CouponIssueCache couponIssueCache, long userId) {
@@ -27,6 +33,26 @@ public class CouponIssueCacheServiceImpl implements CouponIssueCacheService {
         }
     }
 
+    @Override
+    public boolean existCouponIssueTarget() {
+        return cacheReader.lSize(getIssueRequestQueueKey()) > 0;
+    }
+
+    @Override
+    public CouponIssueCommand.RegisterIssue getIssueTarget() {
+        try {
+            return mapper.readValue(
+                cacheReader.lIndex(getIssueRequestQueueKey(), 0), CouponIssueCommand.RegisterIssue.class);
+        } catch (JsonProcessingException e) {
+            throw new EntityNotFoundException("해당 요청을 찾을 수 없습니다.");
+        }
+    }
+
+    @Override
+    public void removeIssuedTarget() {
+        cacheStore.lPop(getIssueRequestQueueKey());
+    }
+
     private boolean availableTotalIssueQuantity(Integer totalQuantity, long couponId) {
         if (totalQuantity == null) {
             return true;
@@ -38,5 +64,9 @@ public class CouponIssueCacheServiceImpl implements CouponIssueCacheService {
     private boolean availableUserIssueQuantity(long couponId, long userId) {
         String key = CacheKeyGenerator.getIssueRequestKey(couponId);
         return cacheReader.sIsMember(key, String.valueOf(userId));
+    }
+
+    private String getIssueRequestQueueKey() {
+        return CacheKeyGenerator.getIssueRequestQueueKey();
     }
 }
