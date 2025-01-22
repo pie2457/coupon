@@ -34,6 +34,11 @@ public class CouponIssueRedisStoreImpl implements CouponIssueCacheStore {
     }
 
     @Override
+    public String lPop(String key) {
+        return redisTemplate.opsForList().leftPop(key);
+    }
+
+    @Override
     public void issueRequest(CouponIssueCommand.RegisterIssue command, int totalIssueQuantity) {
         String issueRequestKey = CacheKeyGenerator.getIssueRequestKey(command.couponId());
         String issueRequestQueueKey = CacheKeyGenerator.getIssueRequestQueueKey();
