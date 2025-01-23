@@ -45,10 +45,10 @@ public class CouponIssueRedisStoreImpl implements CouponIssueCacheStore {
         try {
             String code = redisTemplate.execute(
                 issueScript,
-                List.of(issueRequestKey, issueRequestQueueKey),
-                String.valueOf(command.userId()),
-                String.valueOf(totalIssueQuantity),
-                mapper.writeValueAsString(command));
+                List.of(issueRequestKey, issueRequestQueueKey),   // KEYS[1], KEYS[2]
+                String.valueOf(command.userId()),                 // ARGV[1]
+                String.valueOf(totalIssueQuantity),               // ARGV[2]
+                mapper.writeValueAsString(command));              // ARGV[3]
             CouponIssueRequestCode.checkRequestResult(CouponIssueRequestCode.find(code));
         } catch (JsonProcessingException e) {
             throw new BadRequestException(ErrorCode.FAIL_COUPON_ISSUE_REQUEST);

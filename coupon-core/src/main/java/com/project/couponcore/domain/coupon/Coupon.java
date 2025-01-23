@@ -69,7 +69,7 @@ public class Coupon extends AbstractEntity {
         issuedQuantity++;
     }
 
-    private boolean availableIssueQuantity() {
+    public boolean availableIssueQuantity() {
         if (totalQuantity == null) {
             return true;
         }
@@ -79,6 +79,11 @@ public class Coupon extends AbstractEntity {
     private boolean availableIssueDate() {
         LocalDateTime now = LocalDateTime.now();
         return dateIssueStart.isBefore(now) && dateIssueEnd.isAfter(now);
+    }
+
+    public boolean isIssueComplete() {
+        LocalDateTime now = LocalDateTime.now();
+        return dateIssueEnd.isBefore(now) || !availableIssueQuantity();
     }
 
     @Getter
