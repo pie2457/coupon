@@ -22,7 +22,7 @@ public class CouponCacheServiceImpl implements CouponCacheService {
 
     @Override
     @CachePut(cacheNames = "coupon")
-    public CouponIssueCache putCouponCache(long couponId) {
+    public CouponIssueCache putCachedCoupon(long couponId) {
         return getCachedCoupon(couponId);
     }
 
@@ -34,7 +34,7 @@ public class CouponCacheServiceImpl implements CouponCacheService {
 
     @Override
     @CachePut(cacheNames = "coupon", cacheManager = "localCacheManager")
-    public CouponIssueCache putCouponLocalCache(long couponId) {
+    public CouponIssueCache putLocalCachedCoupon(long couponId) {
         return getLocalCachedCoupon(couponId);
     }
 
