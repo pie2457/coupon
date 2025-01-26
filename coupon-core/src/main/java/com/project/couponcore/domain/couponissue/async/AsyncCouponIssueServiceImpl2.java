@@ -16,7 +16,7 @@ public class AsyncCouponIssueServiceImpl2 implements AsyncCouponIssueService2 {
     private final CouponIssueCacheStore couponIssueCacheStore;
 
     public void issue(CouponIssueCommand.RegisterIssue command) {
-        CouponIssueCache coupon = couponCacheService.getCachedCoupon(command.couponId());
+        CouponIssueCache coupon = couponCacheService.getLocalCachedCoupon(command.couponId());
         coupon.checkIssuableCoupon();
         issueRequest(command, coupon.totalQuantity());
     }
