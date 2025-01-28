@@ -5,7 +5,7 @@ public interface CouponCacheService {
 
     CouponIssueCache getLocalCachedCoupon(long couponId);
 
-    CouponIssueCache putCouponCache(long couponId);
+    CouponIssueCache putCachedCoupon(long couponId);
 
-    CouponIssueCache putCouponLocalCache(long couponId);
+    CouponIssueCache putLocalCachedCoupon(long couponId);
 }

@@ -19,8 +19,8 @@ public class CouponEventListener {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     void issueComplete(CouponIssueCompleteEvent event) {
         log.info("issue complete. cache refresh start..");
-        cacheService.putCouponCache(event.couponId());
-        cacheService.putCouponLocalCache(event.couponId());
+        cacheService.putCachedCoupon(event.couponId());
+        cacheService.putLocalCachedCoupon(event.couponId());
         log.info("issue complete. cache refresh end..");
     }
 }
