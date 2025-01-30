@@ -7,7 +7,7 @@
 
 ### Tech Stack
 **Infra** </br>
-Aws EC2, Aws RDS, Aws Elastic Cache,
+Aws EC2, Aws RDS, Aws Elastic Cache
 
 **Server** </br>
 Java 17, Spring Boot 3.1, Spring Mvc, JPA, QueryDsl
