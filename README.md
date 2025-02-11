@@ -45,4 +45,6 @@ Locust, Gradle, Docker
 ### Load Test
 #### Metric 
 ![image](https://github.com/user-attachments/assets/7ff83678-23ab-494e-9209-25b9d95194db)
+![image](https://github.com/user-attachments/assets/3327a947-9211-4dfe-aabd-92bf3b0ac978)
+
 
