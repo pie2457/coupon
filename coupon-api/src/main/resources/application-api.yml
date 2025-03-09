@@ -5,6 +5,8 @@ spring:
     redis:
       host: localhost
       port: 6380
+  kafka:
+    bootstrap-servers: "localhost:10000,localhost:10001,localhost:10002"
 
 server:
   port: 8080
