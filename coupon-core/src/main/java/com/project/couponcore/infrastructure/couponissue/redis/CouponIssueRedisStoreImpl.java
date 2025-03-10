@@ -6,10 +6,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.couponcore.common.exception.BadRequestException;
-import com.project.couponcore.common.response.ErrorCode;
 import com.project.couponcore.common.util.CacheKeyGenerator;
 import com.project.couponcore.domain.couponissue.CouponIssueCommand;
 import com.project.couponcore.domain.couponissue.cache.CouponIssueCacheStore;
@@ -20,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CouponIssueRedisStoreImpl implements CouponIssueCacheStore {
     private final RedisTemplate<String, String> redisTemplate;
-    private final ObjectMapper mapper = new ObjectMapper();
     private final RedisScript<String> issueScript = issueRequestScript();
 
     @Override
@@ -39,20 +34,15 @@ public class CouponIssueRedisStoreImpl implements CouponIssueCacheStore {
     }
 
     @Override
-    public void issueRequest(CouponIssueCommand.RegisterIssue command, int totalIssueQuantity) {
+    public void validateIssueRequest(CouponIssueCommand.RegisterIssue command, int totalIssueQuantity) {
         String issueRequestKey = CacheKeyGenerator.getIssueRequestKey(command.couponId());
-        String issueRequestQueueKey = CacheKeyGenerator.getIssueRequestQueueKey();
-        try {
-            String code = redisTemplate.execute(
-                issueScript,
-                List.of(issueRequestKey, issueRequestQueueKey),   // KEYS[1], KEYS[2]
-                String.valueOf(command.userId()),                 // ARGV[1]
-                String.valueOf(totalIssueQuantity),               // ARGV[2]
-                mapper.writeValueAsString(command));              // ARGV[3]
-            CouponIssueRequestCode.checkRequestResult(CouponIssueRequestCode.find(code));
-        } catch (JsonProcessingException e) {
-            throw new BadRequestException(ErrorCode.FAIL_COUPON_ISSUE_REQUEST);
-        }
+
+        String code = redisTemplate.execute(
+            issueScript,
+            List.of(issueRequestKey),                     // KEYS[1]
+            String.valueOf(command.userId()),             // ARGV[1]
+            String.valueOf(totalIssueQuantity));          // ARGV[2]
+        CouponIssueRequestCode.checkRequestResult(CouponIssueRequestCode.find(code));
     }
 
     private RedisScript<String> issueRequestScript() {
@@ -63,7 +53,6 @@ public class CouponIssueRedisStoreImpl implements CouponIssueCacheStore {
                             
             if tonumber(ARGV[2]) > redis.call('SCARD', KEYS[1]) then
                 redis.call('SADD', KEYS[1], ARGV[1])
-                redis.call('RPUSH', KEYS[2], ARGV[3])
                 return '1'
             end
                             

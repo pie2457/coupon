@@ -45,7 +45,7 @@ class AsyncCouponIssueServiceImplTest {
         // then
         then(cacheService).should(times(1)).getCachedCoupon(couponId);
         then(cacheCoupon).should(times(1)).checkIssuableCoupon();
-        then(cacheStore).should(times(1)).issueRequest(command, cacheCoupon.totalQuantity());
+        then(cacheStore).should(times(1)).validateIssueRequest(command, cacheCoupon.totalQuantity());
     }
 
     @Test

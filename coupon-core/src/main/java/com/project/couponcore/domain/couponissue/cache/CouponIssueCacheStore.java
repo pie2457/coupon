@@ -7,7 +7,7 @@ public interface CouponIssueCacheStore {
 
     Long rPush(String key, String value);
 
-    void issueRequest(CouponIssueCommand.RegisterIssue command, int totalIssueQuantity);
+    void validateIssueRequest(CouponIssueCommand.RegisterIssue command, int totalIssueQuantity);
 
     String lPop(String key);
 }

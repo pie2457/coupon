@@ -6,6 +6,7 @@ import com.project.couponcore.domain.couponissue.CouponIssueCommand;
 import com.project.couponcore.domain.couponissue.cache.CouponCacheService;
 import com.project.couponcore.domain.couponissue.cache.CouponIssueCache;
 import com.project.couponcore.domain.couponissue.cache.CouponIssueCacheStore;
+import com.project.couponcore.domain.couponissue.kafka.CouponIssueProducer;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class AsyncCouponIssueServiceImpl2 implements AsyncCouponIssueService2 {
     private final CouponCacheService couponCacheService;
     private final CouponIssueCacheStore couponIssueCacheStore;
+    private final CouponIssueProducer couponIssueProducer;
 
     public void issue(CouponIssueCommand.RegisterIssue command) {
         CouponIssueCache coupon = couponCacheService.getLocalCachedCoupon(command.couponId());
@@ -23,8 +25,10 @@ public class AsyncCouponIssueServiceImpl2 implements AsyncCouponIssueService2 {
 
     private void issueRequest(CouponIssueCommand.RegisterIssue command, Integer totalIssueQuantity) {
         if (totalIssueQuantity == null) {
-            couponIssueCacheStore.issueRequest(command, Integer.MAX_VALUE);
+            couponIssueCacheStore.validateIssueRequest(command, Integer.MAX_VALUE);
+        } else {
+            couponIssueCacheStore.validateIssueRequest(command, totalIssueQuantity);
         }
-        couponIssueCacheStore.issueRequest(command, totalIssueQuantity);
+        couponIssueProducer.sendIssueRequest(command);
     }
 }

@@ -69,4 +69,8 @@ public class CouponIssueCacheServiceImpl implements CouponIssueCacheService {
     private String getIssueRequestQueueKey() {
         return CacheKeyGenerator.getIssueRequestQueueKey();
     }
+
+    private String getIssueRequestKey(CouponIssueCommand.RegisterIssue command) {
+        return CacheKeyGenerator.getIssueRequestKey(command.couponId());
+    }
 }
